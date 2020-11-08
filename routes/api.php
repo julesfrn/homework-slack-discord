@@ -2,10 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeworkController;
 
-Route::get('/user', function (Request $request) {
-    return [
-        'jules' => 'fournier',
-        'michel' => 'robert'
-    ];
-});
+Route::get('/homeworks', [HomeworkController::class, 'index']);
+Route::post('/homeworks', [HomeworkController::class, 'create']);

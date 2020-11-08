@@ -16,8 +16,9 @@ class CreateHomeworkTable extends Migration
         Schema::create('homework', function (Blueprint $table) {
             $table->id();
             $table->string('class');
-            $table->text('assignment');
-            $table->timestamp('to_complete_for');
+            $table->string('teacher');
+            $table->text('description');
+            $table->string('due_date_time');
             $table->timestamps();
         });
     }
