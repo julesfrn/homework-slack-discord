@@ -11,6 +11,7 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
 
+import HomeworkService from '../services/HomeworkService'
 import CCreationPopup from '../components/CCreationPopup.vue'
 
 export default {
@@ -47,6 +48,10 @@ export default {
       calendarApi: {}
     }
   },
+  async beforeMount() {
+    const eventsRaw = await HomeworkService.index()
+    this.calendarOptions.events = eventsRaw.map(eventRaw => this.eventMapper(eventRaw))
+  },
   mounted() {
     this.calendarApi = this.$refs.fullCalendar.getApi()
   },
@@ -57,13 +62,16 @@ export default {
     toggleCreationPopup() {
       this.shouldShowCreationPopup = !this.shouldShowCreationPopup
     },
+    eventMapper(eventRaw) {
+      return {
+        id: eventRaw.id,
+        title: `${eventRaw.class} - ${eventRaw.teacher}`,
+        start: eventRaw.due_date_time,
+        description: eventRaw.description
+      }
+    },
     handleCreatedEvent(data) {
-      this.calendarApi.addEvent({
-        id: data.id,
-        title: `${data.class} - ${data.teacher}`,
-        start: data.due_date_time,
-        description: data.description
-      })
+      this.calendarApi.addEvent(this.eventMapper(data))
       this.toggleCreationPopup()
     }
   }

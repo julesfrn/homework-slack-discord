@@ -18903,11 +18903,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _fullcalendar_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @fullcalendar/vue */ "./node_modules/@fullcalendar/vue/dist/main.js");
-/* harmony import */ var _fullcalendar_timegrid__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @fullcalendar/timegrid */ "./node_modules/@fullcalendar/timegrid/main.js");
-/* harmony import */ var _fullcalendar_daygrid__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @fullcalendar/daygrid */ "./node_modules/@fullcalendar/daygrid/main.js");
-/* harmony import */ var _fullcalendar_interaction__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @fullcalendar/interaction */ "./node_modules/@fullcalendar/interaction/main.js");
-/* harmony import */ var _components_CCreationPopup_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/CCreationPopup.vue */ "./resources/js/components/CCreationPopup.vue");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _fullcalendar_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @fullcalendar/vue */ "./node_modules/@fullcalendar/vue/dist/main.js");
+/* harmony import */ var _fullcalendar_timegrid__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @fullcalendar/timegrid */ "./node_modules/@fullcalendar/timegrid/main.js");
+/* harmony import */ var _fullcalendar_daygrid__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @fullcalendar/daygrid */ "./node_modules/@fullcalendar/daygrid/main.js");
+/* harmony import */ var _fullcalendar_interaction__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @fullcalendar/interaction */ "./node_modules/@fullcalendar/interaction/main.js");
+/* harmony import */ var _services_HomeworkService__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../services/HomeworkService */ "./resources/js/services/HomeworkService.js");
+/* harmony import */ var _components_CCreationPopup_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../components/CCreationPopup.vue */ "./resources/js/components/CCreationPopup.vue");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 //
 //
 //
@@ -18915,6 +18924,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 
 
 
@@ -18923,13 +18933,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'VHome',
   components: {
-    FullCalendar: _fullcalendar_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
-    CCreationPopup: _components_CCreationPopup_vue__WEBPACK_IMPORTED_MODULE_4__["default"]
+    FullCalendar: _fullcalendar_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
+    CCreationPopup: _components_CCreationPopup_vue__WEBPACK_IMPORTED_MODULE_6__["default"]
   },
   data: function data() {
     return {
       calendarOptions: {
-        plugins: [_fullcalendar_timegrid__WEBPACK_IMPORTED_MODULE_1__["default"], _fullcalendar_daygrid__WEBPACK_IMPORTED_MODULE_2__["default"], _fullcalendar_interaction__WEBPACK_IMPORTED_MODULE_3__["default"]],
+        plugins: [_fullcalendar_timegrid__WEBPACK_IMPORTED_MODULE_2__["default"], _fullcalendar_daygrid__WEBPACK_IMPORTED_MODULE_3__["default"], _fullcalendar_interaction__WEBPACK_IMPORTED_MODULE_4__["default"]],
         customButtons: {
           addEvent: {
             text: 'Ajouter un devoir',
@@ -18954,6 +18964,32 @@ __webpack_require__.r(__webpack_exports__);
       calendarApi: {}
     };
   },
+  beforeMount: function beforeMount() {
+    var _this = this;
+
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+      var eventsRaw;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              _context.next = 2;
+              return _services_HomeworkService__WEBPACK_IMPORTED_MODULE_5__["default"].index();
+
+            case 2:
+              eventsRaw = _context.sent;
+              _this.calendarOptions.events = eventsRaw.map(function (eventRaw) {
+                return _this.eventMapper(eventRaw);
+              });
+
+            case 4:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }))();
+  },
   mounted: function mounted() {
     this.calendarApi = this.$refs.fullCalendar.getApi();
   },
@@ -18964,13 +19000,16 @@ __webpack_require__.r(__webpack_exports__);
     toggleCreationPopup: function toggleCreationPopup() {
       this.shouldShowCreationPopup = !this.shouldShowCreationPopup;
     },
+    eventMapper: function eventMapper(eventRaw) {
+      return {
+        id: eventRaw.id,
+        title: "".concat(eventRaw["class"], " - ").concat(eventRaw.teacher),
+        start: eventRaw.due_date_time,
+        description: eventRaw.description
+      };
+    },
     handleCreatedEvent: function handleCreatedEvent(data) {
-      this.calendarApi.addEvent({
-        id: data.id,
-        title: "".concat(data["class"], " - ").concat(data.teacher),
-        start: data.due_date_time,
-        description: data.description
-      });
+      this.calendarApi.addEvent(this.eventMapper(data));
       this.toggleCreationPopup();
     }
   }
