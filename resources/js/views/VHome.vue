@@ -1,7 +1,7 @@
 <template>
   <div class="home">
-    <full-calendar :options="calendarOptions" />
-    <c-creation-popup v-if="shouldShowCreationPopup" @close-popup="toggleCreationPopup" />
+    <full-calendar ref="fullCalendar" :options="calendarOptions" />
+    <c-creation-popup v-if="shouldShowCreationPopup" @close-popup="toggleCreationPopup" @created-event="handleCreatedEvent" />
   </div>
 </template>
 
@@ -41,14 +41,14 @@ export default {
         height: '100vh',
         eventClick: this.openPopup,
         eventDisplay: 'auto',
-        events: [{
-          title: 'The Title',
-          start: '2020-11-05T12:30:00',
-          end: '2020-11-05T12:30:00'
-        }]
+        events: []
       },
-      shouldShowCreationPopup: false
+      shouldShowCreationPopup: false,
+      calendarApi: {}
     }
+  },
+  mounted() {
+    this.calendarApi = this.$refs.fullCalendar.getApi()
   },
   methods: {
     addEvent(eventProps) {
@@ -56,6 +56,15 @@ export default {
     },
     toggleCreationPopup() {
       this.shouldShowCreationPopup = !this.shouldShowCreationPopup
+    },
+    handleCreatedEvent(data) {
+      this.calendarApi.addEvent({
+        id: data.id,
+        title: `${data.class} - ${data.teacher}`,
+        start: data.due_date_time,
+        description: data.description
+      })
+      this.toggleCreationPopup()
     }
   }
 }
