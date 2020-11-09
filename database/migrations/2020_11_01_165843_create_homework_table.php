@@ -18,7 +18,7 @@ class CreateHomeworkTable extends Migration
             $table->string('class');
             $table->string('teacher');
             $table->text('description');
-            $table->string('due_date_time');
+            $table->timestamp('due_date_time');
             $table->timestamps();
         });
     }
