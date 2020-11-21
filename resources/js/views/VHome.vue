@@ -40,25 +40,19 @@ export default {
         firstDay: 1,
         nowIndicator: true,
         height: '100vh',
-        eventClick: this.openPopup,
+        eventClick: this.openEvent,
         eventDisplay: 'auto',
-        events: []
+        events: [],
+        allDaySlot: false
       },
-      shouldShowCreationPopup: false,
-      calendarApi: {}
+      shouldShowCreationPopup: false
     }
   },
   async beforeMount() {
     const eventsRaw = await HomeworkService.index()
     this.calendarOptions.events = eventsRaw.map(eventRaw => this.eventMapper(eventRaw))
   },
-  mounted() {
-    this.calendarApi = this.$refs.fullCalendar.getApi()
-  },
   methods: {
-    addEvent(eventProps) {
-      this.calendarOptions.events.push(event)
-    },
     toggleCreationPopup() {
       this.shouldShowCreationPopup = !this.shouldShowCreationPopup
     },
@@ -71,8 +65,11 @@ export default {
       }
     },
     handleCreatedEvent(data) {
-      this.calendarApi.addEvent(this.eventMapper(data))
+      this.calendarOptions.events.push(this.eventMapper(data))
       this.toggleCreationPopup()
+    },
+    openEvent(fullCalendarEvent) {
+      console.log(this.calendarOptions.events.find(event => event.id == fullCalendarEvent.event.id).description)
     }
   }
 }

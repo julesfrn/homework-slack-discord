@@ -18956,12 +18956,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         firstDay: 1,
         nowIndicator: true,
         height: '100vh',
-        eventClick: this.openPopup,
+        eventClick: this.openEvent,
         eventDisplay: 'auto',
-        events: []
+        events: [],
+        allDaySlot: false
       },
-      shouldShowCreationPopup: false,
-      calendarApi: {}
+      shouldShowCreationPopup: false
     };
   },
   beforeMount: function beforeMount() {
@@ -18990,13 +18990,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }, _callee);
     }))();
   },
-  mounted: function mounted() {
-    this.calendarApi = this.$refs.fullCalendar.getApi();
-  },
   methods: {
-    addEvent: function addEvent(eventProps) {
-      this.calendarOptions.events.push(event);
-    },
     toggleCreationPopup: function toggleCreationPopup() {
       this.shouldShowCreationPopup = !this.shouldShowCreationPopup;
     },
@@ -19009,8 +19003,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       };
     },
     handleCreatedEvent: function handleCreatedEvent(data) {
-      this.calendarApi.addEvent(this.eventMapper(data));
+      this.calendarOptions.events.push(this.eventMapper(data));
       this.toggleCreationPopup();
+    },
+    openEvent: function openEvent(fullCalendarEvent) {
+      console.log(this.calendarOptions.events.find(function (event) {
+        return event.id == fullCalendarEvent.event.id;
+      }).description);
     }
   }
 });
