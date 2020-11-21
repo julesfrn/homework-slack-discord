@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Http;
 
 class DailyNotificationDiscordSlack extends Command
 {
@@ -37,6 +38,13 @@ class DailyNotificationDiscordSlack extends Command
      */
     public function handle()
     {
-        
+        Http::post(env('DISCORD_WEBHOOK_URL'), [
+            'content' => 'Hello @Altaïr !',
+            'embeds' => [
+                'title' => "An awesome new notification!",
+                'description' => "Discord Webhooks are great!",
+                'color' => '7506394'
+            ]
+        ]);
     }
 }
