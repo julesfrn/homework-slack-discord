@@ -7,10 +7,10 @@ use Illuminate\Support\Facades\Http;
 use App\Models\Homework;
 use Carbon\Carbon;
 
-class DailyNotificationDiscordSlack extends Command
+class WeeklyNotificationDiscordSlack extends Command
 {
-    protected $signature = 'notify:daily';
-    protected $description = 'Send the daily notification to discord and slack';
+    protected $signature = 'notify:weekly';
+    protected $description = 'Send the weekly notification to discord and slack';
 
     public function __construct()
     {
@@ -18,13 +18,13 @@ class DailyNotificationDiscordSlack extends Command
     }
 
     private function homeWorkForNextWeek() {
-        return Homework::whereBetween('due_date_time', [Carbon::now(), Carbon::now()->addDay()])->get();
+        return Homework::whereBetween('due_date_time', [Carbon::now(), Carbon::now()->addDays(7)])->get();
     }
 
     public function handle()
     {
         $homeworks = $this->homeWorkForNextWeek();
-        $message = 'Bonjour <@&779740992382566410> ! Voici les devoirs à rendre dans les prochaines 24h :';
+        $message = 'Bonjour <@&779740992382566410> ! Voici les devoirs pour la semaine prochaine :';
         foreach ($homeworks as $homework) {
             $dueDate = Carbon::parse($homework->due_date_time, 'UTC')->locale('fr')->calendar();
             $message .= '
