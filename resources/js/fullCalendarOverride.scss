@@ -1,0 +1,10 @@
+.fc-dayGridMonth-button, .fc-timeGridWeek-button,
+.fc-timeGridDay-button, .fc-today-button,
+.fc-next-button, .fc-prev-button {
+  background-color: #fff!important;
+  color: #000!important;
+  &:hover {
+    background-color: #000!important;
+    color: #fff!important;
+  }
+}

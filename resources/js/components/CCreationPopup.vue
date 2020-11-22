@@ -1,9 +1,13 @@
 <template>
   <div class="creation-popup">
     <label for="class">Matière :</label>
-    <input type="text" name="class" id="class" v-model="className" />
+    <select name="class" id="class" v-model="className">
+      <option v-for="aClass in classes" :value="aClass" :key="aClass">{{ aClass }}</option>
+    </select>
     <label for="teacher">Professeur :</label>
-    <input type="text" name="teacher" id="teacher" v-model="teacher" />
+    <select name="teacher" id="teacher" v-model="teacher">
+      <option v-for="aTeacher in currentTeachers" :value="aTeacher" :key="aTeacher">{{ aTeacher }}</option>
+    </select>
     <label for="description">Description du devoir :</label>
     <textarea name="description" id="description" cols="30" rows="10" v-model="description"></textarea>
     <label for="dateDeRendu">Date du rendu :</label>
@@ -38,6 +42,19 @@ export default {
       dueDate: '',
       hours: '',
       minutes: '',
+      classesAndTeachers: {
+        'Art Numérique': ['Clain', 'Dasilva'],
+        'Comportement Conso': ['Fhal', 'Kreitmann'],
+        'Culture Digitale': ['Vincent', 'Tennier'],
+        'Dev': ['Dugast', 'Militello'],
+        'EMarketing': ['Espert', 'Bencelova'],
+        'Anglais': ['Tyushova', 'Cook'],
+        'Ergonomie': ['Gucher', 'Lombardot'],
+        'Gestion de Projet': ['Russo', 'Eskenazi', 'Marmignon'],
+        'Strat de Marque': ['Thiollent', 'Mazière'],
+        'UX': ['Lombardot', 'Richard'],
+        'Webdesign': ['Toupet', 'Houri']
+      }, 
       shouldShowErrorMessage: false
     }
   },
@@ -77,6 +94,12 @@ export default {
     },
     formatedDateTime() {
       return `${this.dueDate}T${this.hours}:${this.minutes}:00`
+    },
+    classes() {
+      return Object.keys(this.classesAndTeachers)
+    },
+    currentTeachers() {
+      return this.className ? this.classesAndTeachers[this.className] : ''
     }
   },
 }

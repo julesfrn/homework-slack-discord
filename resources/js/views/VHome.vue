@@ -1,7 +1,8 @@
 <template>
   <div class="home">
-    <full-calendar ref="fullCalendar" :options="calendarOptions" />
+    <full-calendar ref="fullCalendar" :options="calendarOptions" class="calendar" />
     <c-creation-popup v-if="shouldShowCreationPopup" @close-popup="toggleCreationPopup" @created-event="handleCreatedEvent" />
+    <c-description-popup v-if="shouldShowDescriptionPopup" @close-popup="toggleDescriptionPopup" :eventProps="currentEventProps" />
   </div>
 </template>
 
@@ -13,12 +14,14 @@ import interactionPlugin from '@fullcalendar/interaction'
 
 import HomeworkService from '../services/HomeworkService'
 import CCreationPopup from '../components/CCreationPopup.vue'
+import CDescriptionPopup from '../components/CDescriptionPopup.vue'
 
 export default {
   name: 'VHome',
   components: {
     FullCalendar,
-    CCreationPopup
+    CCreationPopup,
+    CDescriptionPopup
   },
   data() {
     return {
@@ -26,14 +29,14 @@ export default {
         plugins: [ timeGridPlugin, dayGridPlugin, interactionPlugin ],
         customButtons: {
           addEvent: {
-            text: 'Ajouter un devoir',
+            text: '+ Ajouter un devoir',
             click: this.toggleCreationPopup
           }
         },
         headerToolbar: {
-          left: 'prev,next today',
+          left: 'prev,next today dayGridMonth,timeGridWeek,timeGridDay',
           center: 'title',
-          right: 'addEvent dayGridMonth,timeGridWeek,timeGridDay'
+          right: 'addEvent'
         },
         initialView: 'timeGridWeek',
         locale: 'fr',
@@ -45,7 +48,9 @@ export default {
         events: [],
         allDaySlot: false
       },
-      shouldShowCreationPopup: false
+      shouldShowCreationPopup: false,
+      shouldShowDescriptionPopup: false,
+      currentEventProps: {}
     }
   },
   async beforeMount() {
@@ -55,6 +60,9 @@ export default {
   methods: {
     toggleCreationPopup() {
       this.shouldShowCreationPopup = !this.shouldShowCreationPopup
+    },
+    toggleDescriptionPopup() {
+      this.shouldShowDescriptionPopup = !this.shouldShowDescriptionPopup
     },
     eventMapper(eventRaw) {
       return {
@@ -69,17 +77,27 @@ export default {
       this.toggleCreationPopup()
     },
     openEvent(fullCalendarEvent) {
-      console.log(this.calendarOptions.events.find(event => event.id == fullCalendarEvent.event.id).description)
+      this.currentEventProps = this.calendarOptions.events.find(event => event.id == fullCalendarEvent.event.id)
+      this.toggleDescriptionPopup()
     }
   }
 }
 </script>
 
 <style lang="scss">
+@import '../fullCalendarOverride.scss';
+
 body {
   margin: 0;
 }
 .home {
   font-family: 'Roboto', sans-serif;
+  box-sizing: border-box;
+  padding: 15px;
+  height: 100vh;
+  max-height: 100vh;
+}
+.calendar {
+  max-height: calc(100vh - 30px)
 }
 </style>
