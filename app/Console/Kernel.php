@@ -15,7 +15,6 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('notify:daily')->dailyAt('19:00');
         $schedule->command('notify:weekly')->weeklyOn(0, '10:00');
-        $schedule->command('notify:weekly')->everyMinute();
     }
 
     protected function commands()
