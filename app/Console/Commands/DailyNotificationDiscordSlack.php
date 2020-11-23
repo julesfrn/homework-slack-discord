@@ -26,7 +26,7 @@ class DailyNotificationDiscordSlack extends Command
         $homeworks = $this->homeWorkForNextWeek();
         $message;
         if (count($homeworks) > 0) {
-            $message = 'Bonjour <@&780188989390192650> ! Voici les devoirs à rendre dans les prochaines 24h :';
+            $message = 'Bonjour <@&780188989390192650> :cowboy:! Voici les devoirs à rendre dans les prochaines 24h :';
             foreach ($homeworks as $homework) {
                 $dueDate = Carbon::parse($homework->due_date_time, 'UTC')->locale('fr')->calendar();
                 $message .= '
@@ -34,7 +34,7 @@ class DailyNotificationDiscordSlack extends Command
 ' . $homework->description;
             }
         } else { 
-            $message = 'Bonjour <@&780188989390192650> ! Je ne vois aucun devoir à rendre dans les prochaine 24h.';
+            $message = 'Bonjour <@&780188989390192650> :cowboy:! Je ne vois aucun devoir à rendre dans les prochaine 24h.';
         }
         Http::post(env('DISCORD_WEBHOOK_URL'), ['content' => $message]);
     }
