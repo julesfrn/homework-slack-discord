@@ -13,8 +13,8 @@ class Kernel extends ConsoleKernel
 
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('notify:daily')->dailyAt('19:00');
-        $schedule->command('notify:weekly')->weeklyOn(0, '10:00');
+        $schedule->command('notify:daily')->dailyAt('19:00')->timezone('Europe/Paris');
+        $schedule->command('notify:weekly')->weeklyOn(0, '10:00')->timezone('Europe/Paris');
     }
 
     protected function commands()
